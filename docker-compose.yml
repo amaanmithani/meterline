@@ -1,0 +1,24 @@
+services:
+  redpanda:
+    image: redpandadata/redpanda:v24.2.7
+    command:
+      - redpanda
+      - start
+      - --smp=1
+      - --memory=1G
+      - --overprovisioned
+      - --node-id=0
+      - --kafka-addr=PLAINTEXT://0.0.0.0:9092
+      - --advertise-kafka-addr=PLAINTEXT://localhost:19092
+    ports: ["19092:9092"]
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.8
+    environment:
+      CLICKHOUSE_USER: meterline
+      CLICKHOUSE_PASSWORD: meterline
+      CLICKHOUSE_DB: meterline
+    ports: ["19000:9000", "18123:8123"]
+    ulimits: { nofile: { soft: 262144, hard: 262144 } }
+  stripe-mock:
+    image: stripe/stripe-mock:v0.188.0
+    ports: ["12111:12111"]

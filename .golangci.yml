@@ -1,0 +1,12 @@
+version: "2"
+linters:
+  settings:
+    errcheck:
+      # Close-on-read-path and writes to an http.ResponseWriter have no useful
+      # recovery; failures surface through the next read/flush instead.
+      exclude-functions:
+        - (io.Closer).Close
+        - (io.ReadCloser).Close
+        - (*os.File).Close
+        - fmt.Fprint
+        - fmt.Fprintf
