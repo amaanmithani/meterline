@@ -1,0 +1,31 @@
+# Example configuration. Keys live in env vars, never in this file.
+listen: ":8090"
+kafka:
+  brokers: [localhost:19092]
+  topic: usage
+  partitions: 8
+  group: meterline
+clickhouse: {addr: "localhost:19000", database: meterline, user: meterline, password: meterline}
+grace: 1h                         # events for a period arriving later become next-period adjustments
+ingest_keys_env: METERLINE_INGEST_KEYS   # comma-separated
+read_keys_env: METERLINE_READ_KEYS       # empty = public reads (demo)
+default_plan: developer
+customer_plans: {acme: pro}
+plans:
+  developer:
+    name: developer
+    currency: usd
+    meters:
+      fast.input_tokens:  {included: 1000000, price_per: 1000000, tiers: [{up_to: 0, price: "0.05"}]}
+      fast.output_tokens: {included: 1000000, price_per: 1000000, tiers: [{up_to: 0, price: "0.08"}]}
+  pro:
+    name: pro
+    currency: usd
+    meters:
+      fast.input_tokens:  {price_per: 1000000, tiers: [{up_to: 100000000, price: "0.05"}, {up_to: 0, price: "0.03"}]}
+      fast.output_tokens: {price_per: 1000000, tiers: [{up_to: 100000000, price: "0.08"}, {up_to: 0, price: "0.05"}]}
+stripe:
+  key_env: STRIPE_SECRET_KEY
+  base_url: ""                    # "" = api.stripe.com; http://localhost:12111 for stripe-mock
+  customers: {acme: cus_example}
+  meters: {fast.input_tokens: modelmux_input_tokens, fast.output_tokens: modelmux_output_tokens}

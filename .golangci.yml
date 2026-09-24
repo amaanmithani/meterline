@@ -9,4 +9,7 @@ linters:
         - (io.ReadCloser).Close
         - (*os.File).Close
         - fmt.Fprint
+        - (github.com/ClickHouse/clickhouse-go/v2/lib/driver.Rows).Close
+        - (*github.com/amaanmithani/meterline/internal/store.Store).Close
+        - (net.Listener).Close
         - fmt.Fprintf
